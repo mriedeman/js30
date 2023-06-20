@@ -59,7 +59,28 @@
   <audio data-key="76" src="sounds/tink.wav"></audio>
 
 <script>
-
+  //listen for input keys, if the keycode matches an associated audio file, it will play the audio
+  
+  function playSound(event) {
+    const audio = document.querySelector(`audio[data-key="${event.keyCode}"]`)
+    const key = document.querySelector(`.key[data-key="${event.keyCode}"]`)
+    if (!audio) return;
+    //have audio start over if the same key is hit to avoid playign the entire audio
+    audio.currentTime = 0;
+    audio.play();
+    //jquery would be key.addClass('playing')
+    //add transition animation
+    key.classList.add('playing')
+  }
+  
+  function removeTransition(event) {
+    //skip if the event is not a transform
+    if(event.propertyName !== 'transform') return;
+    this.classList.remove('playing')
+  }
+  const keys = document.querySelectorAll('.key');
+  keys.forEach(key => key.addEventListener('transitionend', removeTransition))
+  window.addEventListener('keydown', playSound);
 </script>
 
 
